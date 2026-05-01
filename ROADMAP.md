@@ -4,11 +4,11 @@ The EDGE AI Trails suite ships in phases. Each phase has acceptance criteria. St
 
 ## Phase 1: Suite scaffold
 
-**Status:** In progress
+**Status:** Complete (2026-04-30, v0.1.0)
 
-Foundation work: Next.js app, directory structure, engine interface, hub shell, game shell, all four bible files. No city content yet, no live game logic.
+Foundation work: Next.js app, directory structure, engine type contracts, engine runtime as pure functions, hub and game shell pages, all four bible files. No city content yet, no React integration of the engine.
 
-**Acceptance:**
+**Acceptance (all met):**
 
 - Next.js 16 static export with `basePath: '/edge-ai-trails'`
 - Directory structure for engine, city packs, hub, and game shell
@@ -17,24 +17,30 @@ Foundation work: Next.js app, directory structure, engine interface, hub shell, 
 - Placeholder hub renders at `/edge-ai-trails/`
 - Placeholder game shell renders at `/edge-ai-trails/[city]/`
 - All four bible files exist and accurately describe the scaffold
-- City pack interface and engine type signatures defined (later prompt in this phase)
+- City pack interface and engine type signatures defined (`lib/engine/types.ts`, `lib/engine/city-pack.ts`)
+- Engine runtime as pure functions: scoring, state transitions, random events, interruption (`lib/engine/scoring.ts`, `lib/engine/state.ts`, `lib/engine/random-events.ts`, `lib/engine/interruption.ts`)
 
 ## Phase 2: Port San Diego as first city pack
 
 **Status:** Planned
 
-Port the existing `eaif-trail-sandiego` game into a `sandiego` city pack. The full game playable end-to-end at `/edge-ai-trails/sandiego/`.
+Wire the engine into React, port the existing `eaif-trail-sandiego` game into a `sandiego` city pack, and play it end-to-end at `/edge-ai-trails/sandiego/`. Phase 2 covers both the React layer (engine consumption) and the first content port; the two are tightly coupled because the wiring needs real content to verify against.
 
 **Acceptance:**
 
+- React state management for the engine (a `useGameEngine` hook or equivalent) consuming the pure functions in `lib/engine/`
+- Game UI components: title screen with role selection, scene display with choices, random event notification, victory screen with score breakdown, game over screen, stats bar
+- Pixel-art canvas renderer (or equivalent visual layer for per-scene art)
+- City pack scaffold at `content/cities/sandiego/`
 - All 16 sandiego scenes ported into `content/cities/sandiego/scenes.ts`
 - Three roles (developer, researcher, executive) with starting stats preserved
-- Pete Bernard Easter egg preserved with same probability and outcomes
-- Random events preserved
+- Pete Bernard Easter egg preserved with same probability and outcomes via the generic interruption mechanism
+- Random events ported
 - Sandiego pack registered in `lib/city-registry.ts`
 - Sandiego status set to `past` (the event already happened)
 - All sandiego brand colors and assets ported into the city pack
 - Game plays end-to-end identically to the original sandiego repo
+- `app/[city]/page.tsx` uses the registry to drive `generateStaticParams` (replacing the phase-1 placeholder shim)
 
 ## Phase 3: Supabase wiring
 

@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+(Nothing yet.)
+
+## [0.1.0] - 2026-04-30
+
 ### Added
 
 - Initial bible files: `CLAUDE.md`, `README.md`, `ROADMAP.md`, `CHANGELOG.md`. These establish the project documentation that Claude Code reads on ramp-up for every subsequent session.
