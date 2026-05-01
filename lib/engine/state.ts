@@ -76,3 +76,17 @@ export function applyChoice(
     history: nextHistory,
   };
 }
+
+// Returns true if the player meets a choice's requirements (money, items).
+// Returns true when the choice has no requirements.
+export function canMakeChoice(state: GameState, choice: Choice): boolean {
+  const reqs = choice.requires;
+  if (!reqs) return true;
+  if (reqs.minMoney !== undefined && state.stats.money < reqs.minMoney) {
+    return false;
+  }
+  if (reqs.hasItem && !state.items.includes(reqs.hasItem)) {
+    return false;
+  }
+  return true;
+}

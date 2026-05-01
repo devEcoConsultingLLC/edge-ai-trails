@@ -1,16 +1,9 @@
 import Link from 'next/link';
-import { TopBanner } from '@/components/top-banner';
+import { GameShell } from '@/components/game/game-shell';
+import { findCityBySlug, getCitySlugs } from '@/lib/city-registry';
 
-// Phase 1 placeholder: hardcoded slugs so dev and build succeed before
-// any city packs exist. Phase 2 replaces this with values read from
-// lib/city-registry.ts.
-const PLACEHOLDER_CITIES: Array<{ city: string }> = [
-  { city: '_placeholder' },
-  { city: 'sandiego' },
-];
-
-export async function generateStaticParams() {
-  return PLACEHOLDER_CITIES;
+export function generateStaticParams() {
+  return getCitySlugs().map((slug) => ({ city: slug }));
 }
 
 export default async function CityPage({
@@ -19,23 +12,23 @@ export default async function CityPage({
   params: Promise<{ city: string }>;
 }) {
   const { city } = await params;
+  const pack = findCityBySlug(city);
+
+  if (!pack) {
+    return (
+      <main className="mx-auto max-w-2xl space-y-4 p-6">
+        <h1 className="text-2xl font-bold">Trail not found</h1>
+        <p>No city pack registered for slug: {city}.</p>
+        <Link href="/" className="underline">
+          Back to the hub
+        </Link>
+      </main>
+    );
+  }
 
   return (
-    <>
-      <TopBanner />
-      <main className="mx-auto max-w-3xl px-6 py-16">
-        <h1 className="text-4xl font-bold tracking-tight">
-          Trail not yet ported
-        </h1>
-        <p className="mt-6 text-lg text-muted-foreground">
-          Requested city: <code className="font-mono">{city}</code>
-        </p>
-        <p className="mt-8">
-          <Link href="/edge-ai-trails" className="text-primary underline">
-            Back to the hub
-          </Link>
-        </p>
-      </main>
-    </>
+    <main>
+      <GameShell pack={pack} />
+    </main>
   );
 }

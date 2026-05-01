@@ -6,7 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
-(Nothing yet.)
+### Added
+
+- `hooks/use-game-engine.ts` React state machine consuming the engine pure functions. Composes `applyChoice`, `rollRandomEvent`, `applyRandomEvent`, and the interruption helpers into a single hook.
+- `components/game/game-shell.tsx` rendering title screen, scene display with stats bar, victory screen with score breakdown, and game over screen.
+- `content/cities/sandiego/index.ts` stub city pack with one role and two scenes for end-to-end wiring verification. Real sandiego content ports in subsequent prompts.
+- `lib/engine/state.ts` adds the `canMakeChoice` helper for evaluating choice requirements (money, items).
+- `lib/city-registry.ts` registers the sandiego pack.
+- `app/[city]/page.tsx` reads from the registry, renders `<GameShell />` for known cities, and shows a "Trail not found" page for unknown slugs. The phase-1 placeholder shim is gone; `generateStaticParams` now reads from `getCitySlugs()`.
+
+### Removed
+
+- Phase-1 placeholder `generateStaticParams` shim in `app/[city]/page.tsx` (replaced by registry-driven slug generation).
 
 ## [0.1.0] - 2026-04-30
 
