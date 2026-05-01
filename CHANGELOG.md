@@ -26,6 +26,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `lib/engine/city-pack.ts` defining the `CityPack`, `CityMeta`, `CityBranding`, and `CityStatus` interfaces.
 - `lib/engine/index.ts` barrel re-exporting all engine types.
 - `lib/city-registry.ts` now uses the real `CityPack` type and exposes `findCityBySlug` and `getCitySlugs` helpers.
+- `lib/engine/scoring.ts` with the pure `calculateScore` function returning a full `ScoreBreakdown`.
+- `lib/engine/state.ts` with `initializeGame`, `applyChoice`, and the `applyStatDelta` helper.
+- `lib/engine/random-events.ts` with `rollRandomEvent` and `applyRandomEvent`.
+- `lib/engine/interruption.ts` with `planInterruption` and `shouldFireInterruption`. Generic mechanism for city-specific Easter eggs (sandiego's Pete call, future London equivalent).
+- `lib/engine/index.ts` re-exports the new modules.
 
 ### Changed
 
