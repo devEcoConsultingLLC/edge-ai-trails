@@ -6,7 +6,9 @@ Each game walks players through the journey to a specific event venue: airport d
 
 ## Status
 
-This repo is in early development. See `ROADMAP.md` for the phased plan and `CHANGELOG.md` for what has shipped.
+**v0.1.0 shipped 2026-04-30.** The suite scaffold and engine are complete. Phase 2 (React integration plus the first city pack, San Diego) is next.
+
+See `[ROADMAP.md](http://ROADMAP.md)` for the full plan and `[CHANGELOG.md](http://CHANGELOG.md)` for what has shipped.
 
 ## Tech Stack
 
