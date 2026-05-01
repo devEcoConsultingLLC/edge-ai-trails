@@ -22,16 +22,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `LICENSE.md` carried over from `eaif-trail-sandiego`
 - `.env.local.example` documenting Supabase env vars
 - `.gitignore` for standard Next.js outputs
+- `lib/engine/types.ts` defining the core game types (`PlayerStats`, `Choice`, `SceneData`, `RandomEvent`, `PlayerRole`, `ScoringWeights`, `ScoreBreakdown`, `GameState`, `GameStatus`, `InterruptionConfig`) and the `DEFAULT_SCORING` constant.
+- `lib/engine/city-pack.ts` defining the `CityPack`, `CityMeta`, `CityBranding`, and `CityStatus` interfaces.
+- `lib/engine/index.ts` barrel re-exporting all engine types.
+- `lib/city-registry.ts` now uses the real `CityPack` type and exposes `findCityBySlug` and `getCitySlugs` helpers.
 
 ### Changed
 
 - `app/[city]/page.tsx` placeholder for `generateStaticParams` documented as phase-1 placeholder. Phase 2 will replace it with values read from `lib/city-registry.ts`.
 - `CLAUDE.md` "File Structure" section now matches the actual `app/` layout shipped in PR #1 (hub at `app/page.tsx`, game shell at `app/[city]/page.tsx`).
 - `CLAUDE.md` "Critical Conventions" updated: this repo uses regular merge on PRs, not squash. Project-level override of the global devEco convention.
+- `CLAUDE.md` "Architecture > Engine" and "Architecture > City packs" sections updated to reference the real type contracts in `lib/engine/`.
 
 ### Removed
 
 - Dead `app/[city]/generateStaticParams.ts` helper file. Next.js does not load `generateStaticParams` from a sibling file.
+- `lib/engine/.gitkeep` (directory now has real files).
 
 ### Notes
 

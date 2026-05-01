@@ -32,21 +32,23 @@ The suite is structured as a generic engine plus per-city content packs.
 
 ### Engine (`lib/engine/`)
 
-Generic game state machine, scoring, and choice resolution. Knows nothing about specific cities, scenes, or events. To be implemented in a later prompt of phase 1.
+Generic game state machine, scoring, and choice resolution. Knows nothing about specific cities, scenes, or events. Type contracts are defined in `lib/engine/types.ts` and `lib/engine/city-pack.ts`. The runtime (state machine, scoring, choice resolver) is implemented in subsequent prompts.
 
 ### City packs (`content/cities/<slug>/`)
 
 Each city is a self-contained module exporting a `CityPack` object. Pack shape (sketch, will be formalized when the engine ships):
 
 ```ts
+// Sketch. Full interface in lib/engine/city-pack.ts.
 export interface CityPack {
-  meta: CityMeta;             // slug, event name, date, status, registration URL, hero copy
+  meta: CityMeta;                            // slug, event name, date, status, registration URL, hero copy
+  branding: CityBranding;                    // colors, badge, hero image
+  roles: PlayerRole[];                       // typically 3 (developer, researcher, executive)
   scenes: Record<string, SceneData>;
-  branding: CityBranding;     // colors, badge, hero image
-  roles: PlayerRole[];        // role list with starting stats
   randomEvents: RandomEvent[];
   startScene: string;
   victoryScene: string;
+  interruption?: InterruptionConfig;         // optional city-specific Easter egg
   scoringOverrides?: Partial<ScoringWeights>;
 }
 ```
