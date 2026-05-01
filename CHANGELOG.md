@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+
+- `lib/engine/city-pack.ts`: documented the `victoryScene` sentinel convention. By design, the value of `victoryScene` should not exist in `scenes`; it is a trigger ID used by `applyChoice` to flip status to victory.
+- `content/cities/sandiego/index.ts`: `victoryScene` changed from `'eve_entrance'` (a real scene) to `'victory'` (sentinel).
+- `content/cities/sandiego/scenes.ts`: restored `eve_entrance` as the last playable scene. Its final-bonus choices now transition to the `'victory'` sentinel.
+
+### Fixed
+
+- The original sandiego `eve_entrance` scene with its final-bonus choices is now reachable. Previously the engine flipped to victory status the moment a choice transitioned into `eve_entrance`, so the scene never rendered and its stat bonuses were never applied. Score breakdowns are now consistent with the original sandiego game.
+
 ### Added
 
 - `hooks/use-game-engine.ts` React state machine consuming the engine pure functions. Composes `applyChoice`, `rollRandomEvent`, `applyRandomEvent`, and the interruption helpers into a single hook.
