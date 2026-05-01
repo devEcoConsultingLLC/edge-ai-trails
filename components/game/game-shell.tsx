@@ -1,5 +1,6 @@
 'use client';
 
+import type React from 'react';
 import { Button } from '@/components/ui/button';
 import { useGameEngine } from '@/hooks/use-game-engine';
 import {
@@ -15,33 +16,51 @@ import {
 export function GameShell({ pack }: { pack: CityPack }) {
   const engine = useGameEngine(pack);
 
+  let content: React.ReactNode;
+
   if (engine.state === null) {
-    return <TitleScreen pack={pack} onSelectRole={engine.selectRole} />;
-  }
-
-  const { state } = engine;
-
-  if (state.status === 'playing') {
-    return (
+    content = <TitleScreen pack={pack} onSelectRole={engine.selectRole} />;
+  } else if (engine.state.status === 'playing') {
+    content = (
       <SceneScreen
-        state={state}
+        state={engine.state}
         pack={pack}
         onMakeChoice={engine.makeChoice}
       />
     );
-  }
-
-  if (state.status === 'victory') {
-    return (
-      <VictoryScreen state={state} pack={pack} onRestart={engine.restart} />
+  } else if (engine.state.status === 'victory') {
+    content = (
+      <VictoryScreen
+        state={engine.state}
+        pack={pack}
+        onRestart={engine.restart}
+      />
     );
+  } else if (engine.state.status === 'gameOver') {
+    content = (
+      <GameOverScreen
+        state={engine.state}
+        pack={pack}
+        onRestart={engine.restart}
+      />
+    );
+  } else {
+    content = <p>Unknown game state.</p>;
   }
 
-  if (state.status === 'gameOver') {
-    return <GameOverScreen state={state} pack={pack} onRestart={engine.restart} />;
-  }
-
-  return <p>Unknown game state.</p>;
+  return (
+    <div
+      style={
+        {
+          '--city-bg': pack.branding.secondaryColor,
+          '--city-fg': pack.branding.primaryColor,
+        } as React.CSSProperties
+      }
+      className="min-h-screen w-full bg-[var(--city-bg)] text-[var(--city-fg)]"
+    >
+      {content}
+    </div>
+  );
 }
 
 function TitleScreen({
@@ -55,7 +74,7 @@ function TitleScreen({
     <div className="mx-auto max-w-2xl space-y-6 p-6">
       <div>
         <h1 className="text-3xl font-bold">{pack.meta.name}</h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm opacity-70">
           {pack.meta.eventName} ({pack.meta.eventDate})
         </p>
       </div>
@@ -66,15 +85,13 @@ function TitleScreen({
           <button
             key={role.id}
             onClick={() => onSelectRole(role)}
-            className="block w-full rounded border p-4 text-left hover:bg-accent"
+            className="block w-full rounded border border-[var(--city-fg)]/30 p-4 text-left hover:bg-[var(--city-fg)]/5"
           >
             <div className="font-semibold">{role.name}</div>
             {role.description && (
-              <div className="text-sm text-muted-foreground">
-                {role.description}
-              </div>
+              <div className="text-sm opacity-70">{role.description}</div>
             )}
-            <div className="mt-2 text-xs text-muted-foreground">
+            <div className="mt-2 text-xs opacity-70">
               Energy {role.startingStats.energy}, Stress{' '}
               {role.startingStats.stress}, Money ${role.startingStats.money},
               Knowledge {role.startingStats.knowledge}, Connections{' '}
@@ -125,12 +142,12 @@ function SceneScreen({
             >
               {choice.text}
               {!enabled && choice.requires?.minMoney !== undefined && (
-                <span className="ml-2 text-xs text-muted-foreground">
+                <span className="ml-2 text-xs opacity-70">
                   (needs ${choice.requires.minMoney})
                 </span>
               )}
               {!enabled && choice.requires?.hasItem && (
-                <span className="ml-2 text-xs text-muted-foreground">
+                <span className="ml-2 text-xs opacity-70">
                   (needs {choice.requires.hasItem})
                 </span>
               )}
@@ -138,7 +155,7 @@ function SceneScreen({
           );
         })}
         {scene.choices.length === 0 && (
-          <p className="text-sm text-muted-foreground">No choices available.</p>
+          <p className="text-sm opacity-70">No choices available.</p>
         )}
       </div>
     </div>
@@ -147,30 +164,30 @@ function SceneScreen({
 
 function StatsBar({ state }: { state: GameState }) {
   return (
-    <div className="grid grid-cols-2 gap-2 rounded border p-3 text-sm sm:grid-cols-5">
+    <div className="grid grid-cols-2 gap-2 rounded border border-[var(--city-fg)]/30 p-3 text-sm sm:grid-cols-5">
       <div>
-        <div className="text-xs text-muted-foreground">Energy</div>
+        <div className="text-xs opacity-70">Energy</div>
         <div>{state.stats.energy}/100</div>
       </div>
       <div>
-        <div className="text-xs text-muted-foreground">Stress</div>
+        <div className="text-xs opacity-70">Stress</div>
         <div>{state.stats.stress}/100</div>
       </div>
       <div>
-        <div className="text-xs text-muted-foreground">Money</div>
+        <div className="text-xs opacity-70">Money</div>
         <div>${state.stats.money}</div>
       </div>
       <div>
-        <div className="text-xs text-muted-foreground">Knowledge</div>
+        <div className="text-xs opacity-70">Knowledge</div>
         <div>{state.stats.knowledge}</div>
       </div>
       <div>
-        <div className="text-xs text-muted-foreground">Connections</div>
+        <div className="text-xs opacity-70">Connections</div>
         <div>{state.stats.connections}</div>
       </div>
       {state.items.length > 0 && (
         <div className="col-span-full">
-          <div className="text-xs text-muted-foreground">Items</div>
+          <div className="text-xs opacity-70">Items</div>
           <div>{state.items.join(', ')}</div>
         </div>
       )}
@@ -198,7 +215,7 @@ function VictoryScreen({
     <div className="mx-auto max-w-2xl space-y-6 p-6">
       <div>
         <h1 className="text-3xl font-bold">Victory</h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm opacity-70">
           You made it to {pack.meta.eventName}.
         </p>
       </div>
@@ -221,7 +238,7 @@ function ScoreBreakdownDisplay({ breakdown }: { breakdown: ScoreBreakdown }) {
     ['Role multiplier', breakdown.roleMultiplier.toFixed(2) + 'x'],
   ];
   return (
-    <div className="rounded border p-4">
+    <div className="rounded border border-[var(--city-fg)]/30 p-4">
       <h2 className="mb-3 text-lg font-semibold">Score breakdown</h2>
       <dl className="space-y-1 text-sm">
         {rows.map(([label, value]) => (
@@ -230,7 +247,7 @@ function ScoreBreakdownDisplay({ breakdown }: { breakdown: ScoreBreakdown }) {
             <dd>{value}</dd>
           </div>
         ))}
-        <div className="mt-2 flex justify-between border-t pt-2 text-base font-bold">
+        <div className="mt-2 flex justify-between border-t border-[var(--city-fg)]/30 pt-2 text-base font-bold">
           <dt>Final score</dt>
           <dd>{breakdown.finalScore}</dd>
         </div>
@@ -263,7 +280,7 @@ function GameOverScreen({
           <p>{scene.description}</p>
         </div>
       )}
-      <p className="text-sm text-muted-foreground">{reason}</p>
+      <p className="text-sm opacity-70">{reason}</p>
       <Button onClick={onRestart}>Try again</Button>
     </div>
   );
