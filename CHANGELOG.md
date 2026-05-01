@@ -15,6 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- `components/game/game-shell.tsx` now consumes `pack.branding` via CSS custom properties on the outer wrapper. Sandiego's visible color scheme transitions from the globals.css-driven dark teal background to its actual pack-configured parchment background with dark teal accents. Future cities will render in their own configured colors.
+- Inner sub-components (TitleScreen role cards, StatsBar, VictoryScreen score card, GameOverScreen stat reason) replaced shadcn theme-token classes (`text-muted-foreground`, `bg-accent`, default `border`) with branded variants derived from the city's primary color. Buttons retain shadcn's default theming.
 - `lib/engine/interruption.ts` `planInterruption`: candidate filter now also excludes scenes with `excludeFromInterruption: true`.
 - `components/game/game-shell.tsx` `GameOverScreen`: signature now takes `pack` for scene lookup.
 - `lib/engine/city-pack.ts`: documented the `victoryScene` sentinel convention. By design, the value of `victoryScene` should not exist in `scenes`; it is a trigger ID used by `applyChoice` to flip status to victory.
