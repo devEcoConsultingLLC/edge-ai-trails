@@ -439,16 +439,20 @@ export const scenes: Record<string, SceneData> = {
     ],
   },
 
-  // Victory scene. Reaching this scene flips game status to 'victory', so the
-  // shell renders the VictoryScreen instead of these choices. The original
-  // sandiego "Accept your badge and enter the conference!" choice with its
-  // bonus stat effects (stress -50, knowledge +20, connections +5) is not
-  // reachable in this engine; those final bonuses are intentionally dropped.
+  // Last playable scene. Its single choice transitions to the 'victory'
+  // sentinel, which trips the engine's victory check and flips status to
+  // 'victory'. The sentinel is not a real scene; see CityPack.victoryScene.
   eve_entrance: {
     id: 'eve_entrance',
     title: 'Welcome to EDGE AI!',
     description:
       'You step through the doors of EVE. The registration desk greets you with a warm smile. Your badge is ready. Inside, you hear the buzz of innovation: Qualcomm, Intel, UCSD, DeepX, all here. Keynotes, workshops, demos await. You did it!',
-    choices: [],
+    choices: [
+      {
+        text: 'Accept your badge and enter the conference!',
+        effects: { stress: -50, knowledge: 20, connections: 5 },
+        nextScene: 'victory',
+      },
+    ],
   },
 };
