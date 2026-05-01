@@ -1,19 +1,16 @@
 import Link from 'next/link';
 import { TopBanner } from '@/components/top-banner';
-import { generateStaticParams as cityParams } from './generateStaticParams';
 
-// Next.js 16 with `output: 'export'` requires every reachable slug to appear
-// in generateStaticParams. Until phase 2 populates the registry, fall back to
-// a small set of placeholder slugs (including the soon-to-be-ported sandiego)
-// so dev and build both succeed against the documented verification URLs.
+// Phase 1 placeholder: hardcoded slugs so dev and build succeed before
+// any city packs exist. Phase 2 replaces this with values read from
+// lib/city-registry.ts.
 const PLACEHOLDER_CITIES: Array<{ city: string }> = [
   { city: '_placeholder' },
   { city: 'sandiego' },
 ];
 
 export async function generateStaticParams() {
-  const params = cityParams();
-  return params.length > 0 ? params : PLACEHOLDER_CITIES;
+  return PLACEHOLDER_CITIES;
 }
 
 export default async function CityPage({

@@ -23,6 +23,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `.env.local.example` documenting Supabase env vars
 - `.gitignore` for standard Next.js outputs
 
+### Changed
+
+- `app/[city]/page.tsx` placeholder for `generateStaticParams` documented as phase-1 placeholder. Phase 2 will replace it with values read from `lib/city-registry.ts`.
+- `CLAUDE.md` "File Structure" section now matches the actual `app/` layout shipped in PR #1 (hub at `app/page.tsx`, game shell at `app/[city]/page.tsx`).
+- `CLAUDE.md` "Critical Conventions" updated: this repo uses regular merge on PRs, not squash. Project-level override of the global devEco convention.
+
+### Removed
+
+- Dead `app/[city]/generateStaticParams.ts` helper file. Next.js does not load `generateStaticParams` from a sibling file.
+
 ### Notes
 
 - This repo is a fresh start. It does not share git history with `eaif-trail-sandiego`, the original single-city game from which the engine architecture is derived. The sandiego repo remains as the historical record of the March 2026 event ship.
