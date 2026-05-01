@@ -1,6 +1,7 @@
 'use client';
 
 import type React from 'react';
+import { useEffect } from 'react';
 import { useGameEngine } from '@/hooks/use-game-engine';
 import {
   calculateScore,
@@ -9,18 +10,19 @@ import {
   type CityPack,
   type GameState,
   type PlayerRole,
+  type RandomEvent,
   type ScoreBreakdown,
 } from '@/lib/engine';
 
 export function GameShell({ pack }: { pack: CityPack }) {
   const engine = useGameEngine(pack);
 
-  let content: React.ReactNode;
+  let screen: React.ReactNode;
 
   if (engine.state === null) {
-    content = <TitleScreen pack={pack} onSelectRole={engine.selectRole} />;
+    screen = <TitleScreen pack={pack} onSelectRole={engine.selectRole} />;
   } else if (engine.state.status === 'playing') {
-    content = (
+    screen = (
       <SceneScreen
         state={engine.state}
         pack={pack}
@@ -28,7 +30,7 @@ export function GameShell({ pack }: { pack: CityPack }) {
       />
     );
   } else if (engine.state.status === 'victory') {
-    content = (
+    screen = (
       <VictoryScreen
         state={engine.state}
         pack={pack}
@@ -36,7 +38,7 @@ export function GameShell({ pack }: { pack: CityPack }) {
       />
     );
   } else if (engine.state.status === 'gameOver') {
-    content = (
+    screen = (
       <GameOverScreen
         state={engine.state}
         pack={pack}
@@ -44,7 +46,7 @@ export function GameShell({ pack }: { pack: CityPack }) {
       />
     );
   } else {
-    content = <p>Unknown game state.</p>;
+    screen = <p>Unknown game state.</p>;
   }
 
   return (
@@ -57,9 +59,67 @@ export function GameShell({ pack }: { pack: CityPack }) {
       }
       className="min-h-screen w-full bg-[var(--city-bg)] text-[var(--city-fg)]"
     >
-      {content}
+      {screen}
+      {engine.lastEvent && (
+        <RandomEventToast
+          event={engine.lastEvent}
+          onDismiss={engine.clearLastEvent}
+        />
+      )}
     </div>
   );
+}
+
+function RandomEventToast({
+  event,
+  onDismiss,
+}: {
+  event: RandomEvent;
+  onDismiss: () => void;
+}) {
+  useEffect(() => {
+    const timer = setTimeout(onDismiss, 4000);
+    return () => clearTimeout(timer);
+  }, [event, onDismiss]);
+
+  const effectEntries = Object.entries(event.effects).filter(
+    ([, value]) => value !== undefined && value !== 0,
+  );
+
+  return (
+    <div
+      role="status"
+      className="fixed left-1/2 top-4 z-50 w-full max-w-md -translate-x-1/2 rounded bg-[var(--city-fg)] px-4 py-3 text-[var(--city-bg)] shadow-lg"
+    >
+      <div className="flex items-start gap-3">
+        <div className="flex-1 space-y-1">
+          <p className="text-sm">{event.message}</p>
+          {(effectEntries.length > 0 || event.itemGain) && (
+            <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs opacity-80">
+              {effectEntries.map(([key, value]) => (
+                <span key={key}>
+                  {capitalize(key)} {value > 0 ? '+' : ''}
+                  {value}
+                </span>
+              ))}
+              {event.itemGain && <span>+ {event.itemGain}</span>}
+            </div>
+          )}
+        </div>
+        <button
+          onClick={onDismiss}
+          aria-label="Dismiss notification"
+          className="text-lg leading-none opacity-70 hover:opacity-100"
+        >
+          ×
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function capitalize(s: string): string {
+  return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
 function TitleScreen({
