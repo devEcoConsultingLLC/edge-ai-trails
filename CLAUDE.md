@@ -92,10 +92,16 @@ app/
 
 components/
   top-banner.tsx          devEco banner, admin lock icon (added in phase 3)
+  game/
+    game-shell.tsx        full game UI: title, scene, victory, game over
   ui/                     shadcn primitives
 
 content/
-  cities/<slug>/          city packs
+  cities/sandiego/        first city pack (stub during phase 2 prompt 1, real content lands in subsequent prompts)
+  cities/<slug>/          future city packs
+
+hooks/
+  use-game-engine.ts      React state machine consuming the engine pure functions
 
 lib/
   engine/                 game logic, types, scoring

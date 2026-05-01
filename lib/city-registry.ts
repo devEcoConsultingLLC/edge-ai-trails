@@ -1,8 +1,7 @@
 import type { CityPack } from './engine';
+import { sandiego } from '@/content/cities/sandiego';
 
-// City packs will register themselves here as they ship.
-// Each pack is a self-contained module under content/cities/<slug>/.
-export const cities: ReadonlyArray<CityPack> = [];
+export const cities: ReadonlyArray<CityPack> = [sandiego];
 
 export function findCityBySlug(slug: string): CityPack | undefined {
   return cities.find((c) => c.meta.slug === slug);
