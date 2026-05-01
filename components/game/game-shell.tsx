@@ -1,7 +1,6 @@
 'use client';
 
 import type React from 'react';
-import { Button } from '@/components/ui/button';
 import { useGameEngine } from '@/hooks/use-game-engine';
 import {
   calculateScore,
@@ -133,12 +132,11 @@ function SceneScreen({
         {scene.choices.map((choice, i) => {
           const enabled = canMakeChoice(state, choice);
           return (
-            <Button
+            <button
               key={i}
               onClick={() => onMakeChoice(choice)}
               disabled={!enabled}
-              variant="outline"
-              className="w-full justify-start text-left"
+              className="block w-full rounded border border-[var(--city-fg)]/30 px-4 py-3 text-left transition-colors hover:bg-[var(--city-fg)]/5 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent"
             >
               {choice.text}
               {!enabled && choice.requires?.minMoney !== undefined && (
@@ -151,7 +149,7 @@ function SceneScreen({
                   (needs {choice.requires.hasItem})
                 </span>
               )}
-            </Button>
+            </button>
           );
         })}
         {scene.choices.length === 0 && (
@@ -220,7 +218,12 @@ function VictoryScreen({
         </p>
       </div>
       <ScoreBreakdownDisplay breakdown={breakdown} />
-      <Button onClick={onRestart}>Play again</Button>
+      <button
+        onClick={onRestart}
+        className="rounded bg-[var(--city-fg)] px-4 py-2 font-medium text-[var(--city-bg)] transition-opacity hover:opacity-90"
+      >
+        Play again
+      </button>
     </div>
   );
 }
@@ -281,7 +284,12 @@ function GameOverScreen({
         </div>
       )}
       <p className="text-sm opacity-70">{reason}</p>
-      <Button onClick={onRestart}>Try again</Button>
+      <button
+        onClick={onRestart}
+        className="rounded bg-[var(--city-fg)] px-4 py-2 font-medium text-[var(--city-bg)] transition-opacity hover:opacity-90"
+      >
+        Try again
+      </button>
     </div>
   );
 }
