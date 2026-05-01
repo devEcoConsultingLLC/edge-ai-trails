@@ -73,7 +73,7 @@ All Supabase calls must be wrapped in try/catch. Game must work fully without Su
 
 - **No em dashes.** Anywhere. Use commas, periods, or parentheses.
 - **Conventional commits.** All commit messages follow the spec.
-- **Squash merge** on PRs.
+- **Regular merge** on PRs (not squash, not rebase). This repo overrides the global devEco squash-merge default. Each PR's commit history is preserved on `main`, so prompts should produce clean atomic commits per logical step.
 - **kebab-case** branch names.
 - **City packs are sealed.** No engine code or hub code may import from a specific city pack. Engine reads packs through the registry only.
 - **No city-specific logic in the engine.** If a behavior is unique to one city, it lives in that city's pack as a config value or a scoring override.
@@ -83,13 +83,10 @@ All Supabase calls must be wrapped in try/catch. Game must work fully without Su
 ```
 app/
   layout.tsx              root layout with banner and Poppins
-  page.tsx                redirect to /edge-ai-trails
+  page.tsx                hub, served at /edge-ai-trails/ via basePath
+  [city]/page.tsx         game shell, served at /edge-ai-trails/[city]/
   globals.css             Tailwind + theme
   fonts/                  Poppins .ttf
-  edge-ai-trails/
-    page.tsx              hub
-    [city]/page.tsx       game shell
-    [city]/generateStaticParams.ts
 
 components/
   top-banner.tsx          devEco banner, admin lock icon (added in phase 3)
