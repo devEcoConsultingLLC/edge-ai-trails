@@ -12,8 +12,11 @@ export const sandiego: CityPack = {
   randomEvents,
   startScene: 'airport_dropoff',
   victoryScene: 'victory',  // sentinel; eve_entrance is the last playable scene
-  // interruption is intentionally omitted; the Pete Bernard call lands in
-  // the next prompt along with InterruptionConfig wiring.
+  interruption: {
+    probability: 0.33,
+    entryScene: 'pete_ringing',
+    triggerOnce: true,
+  },
 };
 
 export default sandiego;

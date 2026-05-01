@@ -26,9 +26,13 @@ export function planInterruption(
   // Pick a scene to trigger on. Exclude the start scene (no interruption on
   // the very first scene) and the victory scene (interruption should not
   // hijack a win).
-  const candidates = Object.keys(pack.scenes).filter(
-    (id) => id !== pack.startScene && id !== pack.victoryScene && id !== config.entryScene,
-  );
+  const candidates = Object.keys(pack.scenes).filter((id) => {
+    if (id === pack.startScene) return false;
+    if (id === pack.victoryScene) return false;
+    if (id === config.entryScene) return false;
+    if (pack.scenes[id].excludeFromInterruption) return false;
+    return true;
+  });
 
   if (candidates.length === 0) {
     return { willFire: false, triggerOnce: config.triggerOnce ?? true };
