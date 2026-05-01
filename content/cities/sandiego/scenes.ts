@@ -12,8 +12,12 @@ import type { SceneData } from '@/lib/engine';
 // - The `{playerName}` template placeholder used by the original UI is removed
 //   from descriptions, since this engine has no player-name input.
 // - Em dashes are replaced with commas, periods, or colons per project style.
-// - Pete-call scenes are intentionally excluded; they land in the next prompt
-//   together with the InterruptionConfig wiring.
+// - Pete-call scenes (entry, call, four deaths) are wired through the engine's
+//   generic InterruptionConfig mechanism. The original sandiego runtime rendered
+//   the Pete call as a dedicated PeteCallScreen component with a ringing phase,
+//   four-choice call phase, and four animated death scenes; here those phases
+//   become regular scenes flagged `excludeFromInterruption: true` so the
+//   interruption planner cannot pick them as a random trigger point.
 export const scenes: Record<string, SceneData> = {
   airport_dropoff: {
     id: 'airport_dropoff',
@@ -454,5 +458,92 @@ export const scenes: Record<string, SceneData> = {
         nextScene: 'victory',
       },
     ],
+  },
+
+  // Pete Bernard call interruption. Routed to via the city pack's
+  // InterruptionConfig (probability 0.33). Every path through the call ends in
+  // game over, so each Pete-call response choice tanks both stress and energy
+  // to clamped game-over thresholds. Each scene below sets
+  // `excludeFromInterruption: true` so the planner cannot pick a Pete sub-scene
+  // as the random trigger point.
+  pete_ringing: {
+    id: 'pete_ringing',
+    title: 'Your phone rings',
+    description:
+      'Your phone buzzes violently. The screen lights up with a name you know all too well: Pete Bernard, CEO of the EDGE AI Foundation. He never calls. A chill runs down your spine.',
+    choices: [
+      {
+        text: 'Answer the phone',
+        effects: {},
+        nextScene: 'pete_call',
+      },
+    ],
+    excludeFromInterruption: true,
+  },
+
+  pete_call: {
+    id: 'pete_call',
+    title: 'Pete Bernard is calling...',
+    description:
+      "Something about this call feels... ominous. There is no escaping Pete Bernard.",
+    choices: [
+      {
+        text: 'Answer the call and try to sound cool: "SUP!"',
+        effects: { stress: 100, energy: -100 },
+        nextScene: 'pete_death_1',
+      },
+      {
+        text: 'Look at your phone, grin evilly, and slowly slide it back into your pocket',
+        effects: { stress: 100, energy: -100 },
+        nextScene: 'pete_death_2',
+      },
+      {
+        text: 'Your special Pete-ringer triggers flashbacks to the call before EDGE AI Milan...',
+        effects: { stress: 100, energy: -100 },
+        nextScene: 'pete_death_3',
+      },
+      {
+        text: 'Hand your phone to a nearby stranger and let them answer it',
+        effects: { stress: 100, energy: -100 },
+        nextScene: 'pete_death_4',
+      },
+    ],
+    excludeFromInterruption: true,
+  },
+
+  pete_death_1: {
+    id: 'pete_death_1',
+    title: 'South of the Border',
+    description:
+      "You wake up in Tijuana. You realize you're in a bath tub full of ice as the back pain kicks in...",
+    choices: [],
+    excludeFromInterruption: true,
+  },
+
+  pete_death_2: {
+    id: 'pete_death_2',
+    title: 'The One That Got Away',
+    description:
+      "You wake up in your bed and realize you weren't able to make it to the EDGE AI San Diego event... *sadge*",
+    choices: [],
+    excludeFromInterruption: true,
+  },
+
+  pete_death_3: {
+    id: 'pete_death_3',
+    title: 'Infinite Descent',
+    description:
+      'You wake up on the airplane as the pilot announces your descent to San Diego airport. A kid kicks the back of your seat and you strangely fall back to sleep. You wake up to the same kid kicking your seat and hear the pilot announce your descent to San Diego airport... You strangely fall back to sleep... and this happens forever.',
+    choices: [],
+    excludeFromInterruption: true,
+  },
+
+  pete_death_4: {
+    id: 'pete_death_4',
+    title: 'Stranger Danger',
+    description:
+      "The stranger you handed the phone to suddenly explodes into a plume of smoke as your phone falls to the ground. You question whether you should continue your journey to San Diego as you look down at your phone ringing on the floor... It's Pete again...",
+    choices: [],
+    excludeFromInterruption: true,
   },
 };

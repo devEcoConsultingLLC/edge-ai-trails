@@ -34,6 +34,10 @@ export interface SceneData {
   description: string;
   choices: Choice[];
   art?: string;          // asset key resolved by the city pack's branding/assets
+  // Scenes that are part of an interruption sequence (e.g., Pete-call sub-scenes)
+  // should set this to true so they are not picked as random interruption triggers
+  // by planInterruption. Default: false (the scene is a normal candidate).
+  excludeFromInterruption?: boolean;
 }
 
 export interface RandomEvent {

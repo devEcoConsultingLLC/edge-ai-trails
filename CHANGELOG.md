@@ -6,8 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Pete Bernard call interruption ported into `content/cities/sandiego/scenes.ts`. Six new Pete-related scenes (entry, call, four death scenes), each marked `excludeFromInterruption: true` so they are not picked as random trigger points.
+- `interruption` field wired on the sandiego pack: probability 0.33, entryScene set to the first Pete scene, triggerOnce true.
+- `excludeFromInterruption?: boolean` on the `SceneData` type. `planInterruption` now filters out scenes with this flag from candidate triggers.
+- `GameOverScreen` now renders the current scene's title and description (the death narrative) above the stat-based reason. Affects regular game-overs as well: the player sees the situation they died in, not just a generic message.
+
 ### Changed
 
+- `lib/engine/interruption.ts` `planInterruption`: candidate filter now also excludes scenes with `excludeFromInterruption: true`.
+- `components/game/game-shell.tsx` `GameOverScreen`: signature now takes `pack` for scene lookup.
 - `lib/engine/city-pack.ts`: documented the `victoryScene` sentinel convention. By design, the value of `victoryScene` should not exist in `scenes`; it is a trigger ID used by `applyChoice` to flip status to victory.
 - `content/cities/sandiego/index.ts`: `victoryScene` changed from `'eve_entrance'` (a real scene) to `'victory'` (sentinel).
 - `content/cities/sandiego/scenes.ts`: restored `eve_entrance` as the last playable scene. Its final-bonus choices now transition to the `'victory'` sentinel.
@@ -16,7 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - The original sandiego `eve_entrance` scene with its final-bonus choices is now reachable. Previously the engine flipped to victory status the moment a choice transitioned into `eve_entrance`, so the scene never rendered and its stat bonuses were never applied. Score breakdowns are now consistent with the original sandiego game.
 
-### Added
+### Added (earlier in this Unreleased cycle)
 
 - `hooks/use-game-engine.ts` React state machine consuming the engine pure functions. Composes `applyChoice`, `rollRandomEvent`, `applyRandomEvent`, and the interruption helpers into a single hook.
 - `components/game/game-shell.tsx` rendering title screen, scene display with stats bar, victory screen with score breakdown, and game over screen.
@@ -33,7 +42,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Notes
 
-- Pete Bernard call interruption is **not** included in this prompt. It lands in the next prompt along with the InterruptionConfig wiring.
 - Random event probabilities are tuned per-event to approximate sandiego's 15% per-choice total. Per-event probability is roughly 0.025 with six events.
 - Branding colors and visual rendering are unchanged in this prompt; the GameShell does not yet consume `pack.branding`. That wiring lands in a later phase 2 prompt.
 

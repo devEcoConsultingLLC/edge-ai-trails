@@ -38,7 +38,7 @@ export function GameShell({ pack }: { pack: CityPack }) {
   }
 
   if (state.status === 'gameOver') {
-    return <GameOverScreen state={state} onRestart={engine.restart} />;
+    return <GameOverScreen state={state} pack={pack} onRestart={engine.restart} />;
   }
 
   return <p>Unknown game state.</p>;
@@ -241,21 +241,29 @@ function ScoreBreakdownDisplay({ breakdown }: { breakdown: ScoreBreakdown }) {
 
 function GameOverScreen({
   state,
+  pack,
   onRestart,
 }: {
   state: GameState;
+  pack: CityPack;
   onRestart: () => void;
 }) {
+  const scene = pack.scenes[state.currentSceneId];
   const reason =
     state.stats.energy <= 0
       ? 'You ran out of energy.'
       : 'Stress overload.';
+
   return (
     <div className="mx-auto max-w-2xl space-y-6 p-6">
-      <div>
-        <h1 className="text-3xl font-bold">Game over</h1>
-        <p className="mt-2">{reason}</p>
-      </div>
+      <h1 className="text-3xl font-bold">Game over</h1>
+      {scene && (
+        <div className="space-y-2">
+          <h2 className="text-2xl font-semibold">{scene.title}</h2>
+          <p>{scene.description}</p>
+        </div>
+      )}
+      <p className="text-sm text-muted-foreground">{reason}</p>
       <Button onClick={onRestart}>Try again</Button>
     </div>
   );
