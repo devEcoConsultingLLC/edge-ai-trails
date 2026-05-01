@@ -97,8 +97,13 @@ components/
   ui/                     shadcn primitives
 
 content/
-  cities/sandiego/        first city pack (stub during phase 2 prompt 1, real content lands in subsequent prompts)
-  cities/<slug>/          future city packs
+  cities/sandiego/
+    index.ts             composes the city pack
+    meta.ts              CityMeta and CityBranding
+    roles.ts             three roles
+    scenes.ts            sixteen journey scenes (Pete-call scenes land in next prompt)
+    random-events.ts     six random events
+  cities/<slug>/         future city packs follow the same module structure
 
 hooks/
   use-game-engine.ts      React state machine consuming the engine pure functions
