@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+(Nothing yet.)
+
+## [0.2.0] - 2026-04-30
+
 ### Added
 
 - `RandomEventToast` sub-component in `components/game/game-shell.tsx`. Renders a fixed-position notification at the top of the screen when a random event fires, showing the event message, stat effects, and any item gain. Auto-dismisses after 4 seconds. Manual close button. Styled with the city accent colors (filled `--city-fg` background with `--city-bg` text), distinct from the main page palette.

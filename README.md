@@ -6,7 +6,9 @@ Each game walks players through the journey to a specific event venue: airport d
 
 ## Status
 
-**v0.1.0 shipped 2026-04-30.** The suite scaffold and engine are complete. Phase 2 (React integration plus the first city pack, San Diego) is next.
+**v0.2.0 shipped 2026-04-30.** Sandiego is playable end-to-end at the local dev URL. Phase 3 (Supabase wiring for journey counter, leaderboard, and admin panel) is next.
+
+Canvas pixel-art for per-scene visuals was part of the original sandiego experience; this iteration ships text-only. A canvas decision is pending.
 
 See `[ROADMAP.md](http://ROADMAP.md)` for the full plan and `[CHANGELOG.md](http://CHANGELOG.md)` for what has shipped.
 

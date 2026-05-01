@@ -117,7 +117,9 @@ lib/
 
 ## Current Phase
 
-Phase 1: Suite scaffold. In progress.
+Phase 2 (San Diego port and game UI integration) closed at v0.2.0 on 2026-04-30. Phase 3 (Supabase wiring) is next.
+
+Canvas pixel-art for per-scene visuals is deferred; see `ROADMAP.md`.
 
 See `ROADMAP.md` for the full phase plan.
 

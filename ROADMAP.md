@@ -22,29 +22,31 @@ Foundation work: Next.js app, directory structure, engine type contracts, engine
 
 ## Phase 2: Port San Diego as first city pack
 
-**Status:** Planned
+**Status:** Complete (2026-04-30, v0.2.0). One acceptance item deferred (canvas pixel-art); see Deferred section below.
 
-Wire the engine into React, port the existing `eaif-trail-sandiego` game into a `sandiego` city pack, and play it end-to-end at `/edge-ai-trails/sandiego/`. Phase 2 covers both the React layer (engine consumption) and the first content port; the two are tightly coupled because the wiring needs real content to verify against.
+Wired the engine into React, ported the original sandiego game into a city pack, and shipped the pack-themed game UI. Sandiego plays end-to-end at `/edge-ai-trails/sandiego/` with its own branding.
 
 **Acceptance:**
 
-- React state management for the engine (a `useGameEngine` hook or equivalent) consuming the pure functions in `lib/engine/`
-- Game UI components: title screen with role selection, scene display with choices, random event notification, victory screen with score breakdown, game over screen, stats bar
-- Pixel-art canvas renderer (or equivalent visual layer for per-scene art)
+- React state management for the engine (`hooks/use-game-engine.ts` consumes the pure functions)
+- Game UI components: title screen, scene display with stats bar, victory screen with score breakdown, game over screen with death narrative, random event toast (`components/game/game-shell.tsx`)
 - City pack scaffold at `content/cities/sandiego/`
 - All 16 sandiego scenes ported into `content/cities/sandiego/scenes.ts`
-- Three roles (developer, researcher, executive) with starting stats preserved
-- Pete Bernard Easter egg preserved with same probability and outcomes via the generic interruption mechanism
-- Random events ported
-- Sandiego pack registered in `lib/city-registry.ts`
-- Sandiego status set to `past` (the event already happened)
-- All sandiego brand colors and assets ported into the city pack
-- Game plays end-to-end identically to the original sandiego repo
-- `app/[city]/page.tsx` uses the registry to drive `generateStaticParams` (replacing the phase-1 placeholder shim)
+- Three roles (developer, researcher, executive) with original starting stats and scoring multipliers
+- Pete Bernard call interruption preserved with the same 33% probability and four death paths, wired through the generic interruption mechanism
+- Six random events ported, with toast UI surfacing them when they fire
+- Sandiego pack registered in `lib/city-registry.ts` with `status: 'past'`
+- Sandiego brand colors (`#0d3a4a` accent, `#f4ecdb` background) wired into the GameShell via CSS custom properties; future cities render in their own configured colors
+- Game plays end-to-end identically to the original sandiego repo (modulo pixel-art visuals; see Deferred)
+- `app/[city]/page.tsx` reads from the registry; `generateStaticParams` enumerates known cities
+
+**Deferred:**
+
+- **Pixel-art canvas renderer (or equivalent visual layer for per-scene art).** The original sandiego repo had per-scene `<canvas>` animations. Edge-ai-trails ships v0.2.0 as text-only. Decision still pending whether to add a canvas-port phase between phase 5 (deploy) and any future polish round, or ship the suite text-only and revisit later. Sandiego is fully playable in its current form.
 
 ## Phase 3: Supabase wiring
 
-**Status:** Planned
+**Status:** Next
 
 New Supabase project for the suite. City-scoped tables. Admin panel updated to filter by city.
 
