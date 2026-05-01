@@ -10,10 +10,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - `hooks/use-game-engine.ts` React state machine consuming the engine pure functions. Composes `applyChoice`, `rollRandomEvent`, `applyRandomEvent`, and the interruption helpers into a single hook.
 - `components/game/game-shell.tsx` rendering title screen, scene display with stats bar, victory screen with score breakdown, and game over screen.
-- `content/cities/sandiego/index.ts` stub city pack with one role and two scenes for end-to-end wiring verification. Real sandiego content ports in subsequent prompts.
 - `lib/engine/state.ts` adds the `canMakeChoice` helper for evaluating choice requirements (money, items).
 - `lib/city-registry.ts` registers the sandiego pack.
 - `app/[city]/page.tsx` reads from the registry, renders `<GameShell />` for known cities, and shows a "Trail not found" page for unknown slugs. The phase-1 placeholder shim is gone; `generateStaticParams` now reads from `getCitySlugs()`.
+- Real sandiego content ported into `content/cities/sandiego/`:
+  - `meta.ts` with CityMeta and CityBranding
+  - `roles.ts` with three roles (developer, researcher, executive) and their original starting stats and scoring multipliers
+  - `scenes.ts` with all 16 journey scenes from airport drop-off to EVE entrance, preserving original titles, descriptions, choices, and stat effects
+  - `random-events.ts` with the original event set (finding money, phone battery, coffee, overhearing, meeting colleagues, rain)
+  - `index.ts` composes the modules into a CityPack
+- Stub `content/cities/sandiego/index.ts` is replaced by the new module structure.
+
+### Notes
+
+- Pete Bernard call interruption is **not** included in this prompt. It lands in the next prompt along with the InterruptionConfig wiring.
+- Random event probabilities are tuned per-event to approximate sandiego's 15% per-choice total. Per-event probability is roughly 0.025 with six events.
+- Branding colors and visual rendering are unchanged in this prompt; the GameShell does not yet consume `pack.branding`. That wiring lands in a later phase 2 prompt.
 
 ### Removed
 
