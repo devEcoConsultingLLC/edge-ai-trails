@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- `RandomEventToast` sub-component in `components/game/game-shell.tsx`. Renders a fixed-position notification at the top of the screen when a random event fires, showing the event message, stat effects, and any item gain. Auto-dismisses after 4 seconds. Manual close button. Styled with the city accent colors (filled `--city-fg` background with `--city-bg` text), distinct from the main page palette.
 - Pete Bernard call interruption ported into `content/cities/sandiego/scenes.ts`. Six new Pete-related scenes (entry, call, four death scenes), each marked `excludeFromInterruption: true` so they are not picked as random trigger points.
 - `interruption` field wired on the sandiego pack: probability 0.33, entryScene set to the first Pete scene, triggerOnce true.
 - `excludeFromInterruption?: boolean` on the `SceneData` type. `planInterruption` now filters out scenes with this flag from candidate triggers.
