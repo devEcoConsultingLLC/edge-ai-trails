@@ -9,6 +9,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Initial bible files: `CLAUDE.md`, `README.md`, `ROADMAP.md`, `CHANGELOG.md`. These establish the project documentation that Claude Code reads on ramp-up for every subsequent session.
+- Next.js 16 static export scaffold with `basePath: '/edge-ai-trails'`
+- Directory structure for engine (`lib/engine/`), city packs (`content/cities/`), hub (`app/edge-ai-trails/`), and game shell (`app/edge-ai-trails/[city]/`)
+- shadcn/ui initialized with New York style, base color slate, Lucide icons
+- Poppins font loaded via `next/font/local` from `app/fonts/` (four weights)
+- Placeholder hub page rendering at `/edge-ai-trails/`
+- Placeholder game shell rendering at `/edge-ai-trails/[city]/` with city slug echo
+- `components/top-banner.tsx` with static devEco branding (auth wiring deferred to phase 3)
+- `lib/supabase.ts` with env-driven client init (no calls yet)
+- `lib/city-registry.ts` exporting an empty `cities` array
+- `lib/utils.ts` with the shadcn `cn()` helper
+- `LICENSE.md` carried over from `eaif-trail-sandiego`
+- `.env.local.example` documenting Supabase env vars
+- `.gitignore` for standard Next.js outputs
 
 ### Notes
 
